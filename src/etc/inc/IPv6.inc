@@ -599,9 +599,9 @@ class Net_IPv6
      * @static
      * @author Manuel Schmitt
      */
-    function isCompressible($ip)
+    function isCompressible(string $ip): bool
     {
-        return (bool)($ip != Net_IPv6::compress($ip));
+        return ($ip != Net_IPv6::compress($ip));
     }
 
     /**
