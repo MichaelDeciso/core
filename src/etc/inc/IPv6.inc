@@ -125,7 +125,7 @@ class Net_IPv6
      * @access public
      * @static
      */
-    public static function separate($ip)
+    private static function separate($ip)
     {
 
         $addr = $ip;
@@ -154,7 +154,7 @@ class Net_IPv6
      * @access public
      * @static
      */
-    public static function removeNetmaskSpec($ip)
+    private static function removeNetmaskSpec($ip)
     {
         $elements = Net_IPv6::separate($ip);
         return $elements[0];
@@ -175,7 +175,7 @@ class Net_IPv6
      * @see removeNetmaskSpec()
      * @deprecated
      */
-    public static function removePrefixLength($ip)
+    private static function removePrefixLength($ip)
     {
         $pos = strrpos($ip, '/');
         if (false !== $pos) {
@@ -194,7 +194,7 @@ class Net_IPv6
      * @access public
      * @static
      */
-    public static function getNetmaskSpec($ip)
+    private static function getNetmaskSpec($ip)
     {
         $elements = Net_IPv6::separate($ip);
         return $elements[1];
@@ -214,7 +214,7 @@ class Net_IPv6
      * @static
      * @deprecated
      */
-    public static function getPrefixLength($ip)
+    private static function getPrefixLength($ip)
     {
         if (preg_match("/^([0-9a-fA-F:]{2,39})\/(\d{1,3})*$/", $ip, $matches)) {
             return $matches[2];
@@ -301,83 +301,6 @@ class Net_IPv6
         }
 
         return false;
-    }
-
-    /**
-     * Returns the type of an IPv6 address.
-     *
-     * RFC 2373, Section 2.3 describes several types of addresses in
-     * the IPv6 address space.
-     * Several address types are markers for reserved spaces and as
-     * a consequence are subject to change.
-     *
-     * @param string $ip the IP address in Hex format,
-     *                    compressed IPs are allowed
-     *
-     * @return int one of the address type constants
-     * @access public
-     * @since  1.1.0
-     * @static
-     *
-     * @see    NET_IPV6_UNASSIGNED
-     * @see    NET_IPV6_RESERVED
-     * @see    NET_IPV6_RESERVED_NSAP
-     * @see    NET_IPV6_RESERVED_IPX
-     * @see    NET_IPV6_RESERVED_UNICAST_GEOGRAPHIC
-     * @see    NET_IPV6_UNICAST_PROVIDER
-     * @see    NET_IPV6_MULTICAST
-     * @see    NET_IPV6_LOCAL_LINK
-     * @see    NET_IPV6_LOCAL_SITE
-     * @see    NET_IPV6_IPV4MAPPING
-     * @see    NET_IPV6_UNSPECIFIED
-     * @see    NET_IPV6_LOOPBACK
-     * @see    NET_IPV6_UNKNOWN_TYPE
-     */
-    public static function getAddressType($ip)
-    {
-        $ip = Net_IPv6::removeNetmaskSpec($ip);
-        $binip = Net_IPv6::_ip2Bin($ip);
-
-        if (0 == strncmp(str_repeat('0', 128), $binip, 128)) { // ::/128
-            return NET_IPV6_UNSPECIFIED;
-        } elseif (0 == strncmp(str_repeat('0', 127) . '1', $binip, 128)) { // ::/128
-            return NET_IPV6_LOOPBACK;
-        } elseif (0 == strncmp(str_repeat('0', 80) . str_repeat('1', 16), $binip, 96)) { // ::ffff/96
-            return NET_IPV6_IPV4MAPPING;
-        } elseif (0 == strncmp('1111111010', $binip, 10)) {
-            return NET_IPV6_LOCAL_LINK;
-        } elseif (0 == strncmp('1111111011', $binip, 10)) {
-            return NET_IPV6_LOCAL_SITE;
-        } elseif (0 == strncmp('111111100', $binip, 9)) {
-            return NET_IPV6_UNASSIGNED;
-        } elseif (0 == strncmp('11111111', $binip, 8)) {
-            return NET_IPV6_MULTICAST;
-        } elseif (0 == strncmp('00000000', $binip, 8)) {
-            return NET_IPV6_RESERVED;
-        } elseif (0 == strncmp('00000001', $binip, 8)
-            || 0 == strncmp('1111110', $binip, 7)) {
-            return NET_IPV6_UNASSIGNED;
-        } elseif (0 == strncmp('0000001', $binip, 7)) {
-            return NET_IPV6_RESERVED_NSAP;
-        } elseif (0 == strncmp('0000010', $binip, 7)) {
-            return NET_IPV6_RESERVED_IPX;
-        } elseif (0 == strncmp('0000011', $binip, 7) ||
-            0 == strncmp('111110', $binip, 6) ||
-            0 == strncmp('11110', $binip, 5) ||
-            0 == strncmp('00001', $binip, 5) ||
-            0 == strncmp('1110', $binip, 4) ||
-            0 == strncmp('0001', $binip, 4) ||
-            0 == strncmp('001', $binip, 3) ||
-            0 == strncmp('011', $binip, 3) ||
-            0 == strncmp('101', $binip, 3) ||
-            0 == strncmp('110', $binip, 3)) {
-            return NET_IPV6_UNASSIGNED;
-        } elseif (0 == strncmp('010', $binip, 3)) {
-            return NET_IPV6_UNICAST_PROVIDER;
-        } elseif (0 == strncmp('100', $binip, 3)) {
-            return NET_IPV6_RESERVED_UNICAST_GEOGRAPHIC;
-        }
-        return NET_IPV6_UNKNOWN_TYPE;
     }
 
     /**
@@ -563,48 +486,6 @@ class Net_IPv6
     }
 
     /**
-     * Represent IPv6 address in RFC5952 format.
-     *
-     * @param string $ip a valid IPv6-address (hex format)
-     *
-     * @return string the recommended representation of IPv6-address (hex format)
-     * @access public
-     * @see    compress()
-     * @static
-     * @author koyama at hoge dot org
-     * @todo This method may become a part of compress() in a further releases
-     */
-    public static function recommendedFormat($ip)
-    {
-        $compressed = self::compress($ip, true);
-        // RFC5952 4.2.2
-        // The symbol "::" MUST NOT be used to shorten just one
-        // 16-bit 0 field.
-        if ((substr_count($compressed, ':') == 7) &&
-            (strpos($compressed, '::') !== false)) {
-            $compressed = str_replace('::', ':0:', $compressed);
-        }
-        return $compressed;
-    }
-
-    /**
-     * Checks, if an IPv6 address can be compressed
-     *
-     * @param string $ip a valid IPv6 address
-     *
-     * @return bool true, if address can be compressed
-     *
-     * @access public
-     * @since 1.2.0b
-     * @static
-     * @author Manuel Schmitt
-     */
-    function isCompressible(string $ip): bool
-    {
-        return ($ip != Net_IPv6::compress($ip));
-    }
-
-    /**
      * Splits an IPv6 address into the IPv6 and a possible IPv4 part
      *
      * RFC 2373 allows you to note the last two parts of an IPv6 address as
@@ -622,7 +503,7 @@ class Net_IPv6
      * @access public
      * @static
      */
-    public static function SplitV64($ip, $uncompress = true)
+    private static function SplitV64($ip, $uncompress = true)
     {
         $ip = Net_IPv6::removeNetmaskSpec($ip);
 
@@ -765,7 +646,7 @@ class Net_IPv6
      * @access private
      * @since 1.1.0
      */
-    protected static function _ip2Bin($ip)
+    private static function _ip2Bin($ip)
     {
         $binstr = '';
 
@@ -791,7 +672,7 @@ class Net_IPv6
      * @access private
      * @since 1.1.0
      */
-    protected static function _bin2Ip($bin)
+    private static function _bin2Ip($bin)
     {
         $ip = "";
         if (strlen($bin) < 128) {
