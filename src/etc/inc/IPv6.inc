@@ -21,8 +21,6 @@
  * @link      http://pear.php.net/package/Net_IPv6
  */
 
-// {{{ constants
-
 /**
  * Address Type: Unassigned (RFC 1884, Section 2.3)
  * @see getAddressType()
@@ -102,9 +100,6 @@ define("NET_IPV6_LOOPBACK", 53);
  */
 define("NET_IPV6_UNKNOWN_TYPE", 1001);
 
-// }}}
-// {{{ Net_IPv6
-
 /**
  * Class to validate and to work with IPv6 addresses.
  *
@@ -120,8 +115,6 @@ define("NET_IPV6_UNKNOWN_TYPE", 1001);
  */
 class Net_IPv6
 {
-
-    // {{{ separate()
     /**
      * Separates an IPv6 address into the address and a prefix length part
      *
@@ -150,16 +143,13 @@ class Net_IPv6
         }
         return array($addr, $spec);
     }
-    // }}}
-
-    // {{{ removeNetmaskSpec()
 
     /**
      * Removes a possible existing prefix length/ netmask specification at an IP address.
      *
      * @param String $ip the (compressed) IP as Hex representation
      *
-     * @return String the IP without netmask length
+     * @return string the IP without netmask length
      * @since  1.1.0
      * @access public
      * @static
@@ -169,8 +159,6 @@ class Net_IPv6
         $elements = Net_IPv6::separate($ip);
         return $elements[0];
     }
-    // }}}
-    // {{{ removePrefixLength()
 
     /**
      * Tests for a prefix length specification in the address
@@ -181,7 +169,7 @@ class Net_IPv6
      *
      * @param String $ip a valid ipv6 address
      *
-     * @return String the address without a prefix length
+     * @return string the address without a prefix length
      * @access public
      * @static
      * @see removeNetmaskSpec()
@@ -196,15 +184,12 @@ class Net_IPv6
         return $ip;
     }
 
-    // }}}
-    // {{{ getNetmaskSpec()
-
     /**
      * Returns a possible existing prefix length/netmask specification on an IP address.
      *
      * @param String $ip the (compressed) IP as Hex representation
      *
-     * @return String the netmask spec
+     * @return string the netmask spec
      * @since  1.1.0
      * @access public
      * @static
@@ -214,9 +199,6 @@ class Net_IPv6
         $elements = Net_IPv6::separate($ip);
         return $elements[1];
     }
-
-    // }}}
-    // {{{ getPrefixLength()
 
     /**
      * Tests for a prefix length specification in the address
@@ -241,9 +223,6 @@ class Net_IPv6
         }
     }
 
-    // }}}
-    // {{{ getNetmask()
-
     /**
      * Calculates the network prefix based on the netmask bits.
      *
@@ -251,7 +230,7 @@ class Net_IPv6
      * @param int $bits if the number of netmask bits is not part of the IP
      *                     you must provide the number of bits
      *
-     * @return String the network prefix
+     * @return string the network prefix
      * @since  1.1.0
      * @access public
      * @static
@@ -275,9 +254,6 @@ class Net_IPv6
         return Net_IPv6::_bin2Ip(Net_IPv6::_ip2Bin($addr) & $binNetmask);
     }
 
-    // }}}
-    // {{{ isInNetmask()
-
     /**
      * Checks if an (compressed) IP is in a specific address space.
      *
@@ -289,7 +265,7 @@ class Net_IPv6
      * @param int $bits the number of netmask bits to compare,
      *                        if not given in $ip
      *
-     * @return boolean true if $ip is in the netmask
+     * @return bool true if $ip is in the netmask
      * @since  1.1.0
      * @access public
      * @static
@@ -327,9 +303,6 @@ class Net_IPv6
         return false;
     }
 
-    // }}}
-    // {{{ getAddressType()
-
     /**
      * Returns the type of an IPv6 address.
      *
@@ -338,7 +311,7 @@ class Net_IPv6
      * Several address types are markers for reserved spaces and as
      * a consequence are subject to change.
      *
-     * @param String $ip the IP address in Hex format,
+     * @param string $ip the IP address in Hex format,
      *                    compressed IPs are allowed
      *
      * @return int one of the address type constants
@@ -407,9 +380,6 @@ class Net_IPv6
         return NET_IPV6_UNKNOWN_TYPE;
     }
 
-    // }}}
-    // {{{ Uncompress()
-
     /**
      * Uncompresses an IPv6 address
      *
@@ -427,13 +397,13 @@ class Net_IPv6
      *
      * Example of calling with invalid input: 1::2:3:4:5:6:7:8:9 -> 1:0:2:3:4:5:6:7:8:9
      *
-     * @param String $ip a (possibly) valid IPv6-address (hex format)
-     * @param Boolean $leadingZeros if true, leading zeros are added to each
+     * @param string $ip a (possibly) valid IPv6-address (hex format)
+     * @param bool $leadingZeros if true, leading zeros are added to each
      *                              block of the address
      *                              (FF01::101  ->
      *                               FF01:0000:0000:0000:0000:0000:0000:0101)
      *
-     * @return String the uncompressed IPv6-address (hex format)
+     * @return string the uncompressed IPv6-address (hex format)
      * @access public
      * @see Compress()
      * @static
@@ -510,9 +480,6 @@ class Net_IPv6
         return $uip . $prefix;
     }
 
-    // }}}
-    // {{{ Compress()
-
     /**
      * Compresses an IPv6 address
      *
@@ -532,10 +499,10 @@ class Net_IPv6
      *
      * Example: FF01::0:1 -> FF01::1
      *
-     * @param String $ip a valid IPv6-address (hex format)
-     * @param boolean $force if true the address will be compressed as best as possible (since 1.2.0)
+     * @param string $ip a valid IPv6-address (hex format)
+     * @param bool $force if true the address will be compressed as best as possible (since 1.2.0)
      *
-     * @return String the compressed IPv6-address (hex format)
+     * @return string the compressed IPv6-address (hex format)
      * @access public
      * @see    Uncompress()
      * @static
@@ -595,14 +562,12 @@ class Net_IPv6
 
     }
 
-    // }}}
-    // {{{ recommendedFormat()
     /**
      * Represent IPv6 address in RFC5952 format.
      *
-     * @param String $ip a valid IPv6-address (hex format)
+     * @param string $ip a valid IPv6-address (hex format)
      *
-     * @return String the recommended representation of IPv6-address (hex format)
+     * @return string the recommended representation of IPv6-address (hex format)
      * @access public
      * @see    compress()
      * @static
@@ -621,16 +586,13 @@ class Net_IPv6
         }
         return $compressed;
     }
-    // }}}
-
-    // {{{ isCompressible()
 
     /**
      * Checks, if an IPv6 address can be compressed
      *
-     * @param String $ip a valid IPv6 address
+     * @param string $ip a valid IPv6 address
      *
-     * @return Boolean true, if address can be compressed
+     * @return bool true, if address can be compressed
      *
      * @access public
      * @since 1.2.0b
@@ -642,9 +604,6 @@ class Net_IPv6
         return (bool)($ip != Net_IPv6::compress($ip));
     }
 
-    // }}}
-    // {{{ SplitV64()
-
     /**
      * Splits an IPv6 address into the IPv6 and a possible IPv4 part
      *
@@ -654,8 +613,8 @@ class Net_IPv6
      * Example:  0:0:0:0:0:0:13.1.68.3
      *           0:0:0:0:0:FFFF:129.144.52.38
      *
-     * @param String $ip a valid IPv6-address (hex format)
-     * @param Boolean $uncompress if true, the address will be uncompressed
+     * @param string $ip a valid IPv6-address (hex format)
+     * @param bool $uncompress if true, the address will be uncompressed
      *                            before processing
      *
      * @return array  [0] contains the IPv6 part,
@@ -681,17 +640,14 @@ class Net_IPv6
         }
     }
 
-    // }}}
-    // {{{ checkIPv6()
-
     /**
      * Checks an IPv6 address
      *
      * Checks if the given IP is IPv6-compatible
      *
-     * @param String $ip a valid IPv6-address
+     * @param string $ip a valid IPv6-address
      *
-     * @return Boolean true if $ip is an IPv6 address
+     * @return bool true if $ip is an IPv6 address
      * @access public
      * @static
      */
@@ -750,10 +706,6 @@ class Net_IPv6
         }
     }
 
-    // }}}
-
-    // {{{ _parseAddress()
-
     /**
      * Returns the lowest and highest IPv6 address
      * for a given IP and netmask specification
@@ -765,8 +717,8 @@ class Net_IPv6
      * contains the lowest possible IP address. The key
      * 'end' the highest address.
      *
-     * @param String $ipToParse the IPv6 address
-     * @param String $bits the optional count of netmask bits
+     * @param string $ipToParse the IPv6 address
+     * @param string $bits the optional count of netmask bits
      *
      * @return array ['start', 'end'] the lowest and highest IPv6 address
      * @access public
@@ -803,17 +755,13 @@ class Net_IPv6
         return array('start' => $startAddress, 'end' => $endAddress);
     }
 
-    // }}}
-
-    // {{{ _ip2Bin()
-
     /**
      * Converts an IPv6 address from Hex into Binary representation.
      *
-     * @param String $ip the IP to convert (a:b:c:d:e:f:g:h),
+     * @param string $ip the IP to convert (a:b:c:d:e:f:g:h),
      *                   compressed IPs are allowed
      *
-     * @return String the binary representation
+     * @return string the binary representation
      * @access private
      * @since 1.1.0
      */
@@ -834,15 +782,12 @@ class Net_IPv6
         return $binstr;
     }
 
-    // }}}
-    // {{{ _bin2Ip()
-
     /**
      * Converts an IPv6 address from Binary into Hex representation.
      *
-     * @param String $bin the IP address as binary
+     * @param string $bin the IP address as binary
      *
-     * @return String the uncompressed Hex representation
+     * @return string the uncompressed Hex representation
      * @access private
      * @since 1.1.0
      */
@@ -862,15 +807,4 @@ class Net_IPv6
         $ip = substr($ip, 0, -1);
         return $ip;
     }
-
-    // }}}
 }
-// }}}
-
-/*
- * Local variables:
- * tab-width: 4
- * c-basic-offset: 4
- * c-hanging-comment-ender-p: nil
- * End:
- */
