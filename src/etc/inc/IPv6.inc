@@ -247,8 +247,8 @@ class Net_IPv6
     /**
      * Calculates the network prefix based on the netmask bits.
      *
-     * @param String $ip   the (compressed) IP in Hex format
-     * @param int    $bits if the number of netmask bits is not part of the IP
+     * @param String $ip the (compressed) IP in Hex format
+     * @param int $bits if the number of netmask bits is not part of the IP
      *                     you must provide the number of bits
      *
      * @return String the network prefix
@@ -258,7 +258,7 @@ class Net_IPv6
      */
     public static function getNetmask($ip, $bits = null)
     {
-        if (null==$bits) {
+        if (null == $bits) {
             $elements = explode('/', $ip);
             if (2 == count($elements)) {
                 $addr = $elements[0];
@@ -270,8 +270,8 @@ class Net_IPv6
             $addr = $ip;
         }
 
-        $addr       = Net_IPv6::uncompress($addr);
-        $binNetmask = str_repeat('1', $bits).str_repeat('0', 128 - $bits);
+        $addr = Net_IPv6::uncompress($addr);
+        $binNetmask = str_repeat('1', $bits) . str_repeat('0', 128 - $bits);
         return Net_IPv6::_bin2Ip(Net_IPv6::_ip2Bin($addr) & $binNetmask);
     }
 
@@ -284,9 +284,9 @@ class Net_IPv6
      * If the IP does not contain the number of netmask bits (F8000::FFFF/16)
      * then you have to use the $bits parameter.
      *
-     * @param String $ip      the IP to check (eg. F800::FFFF)
+     * @param String $ip the IP to check (eg. F800::FFFF)
      * @param String $netmask the netmask (eg F800::)
-     * @param int    $bits    the number of netmask bits to compare,
+     * @param int $bits the number of netmask bits to compare,
      *                        if not given in $ip
      *
      * @return boolean true if $ip is in the netmask
@@ -294,20 +294,20 @@ class Net_IPv6
      * @access public
      * @static
      */
-    public static function isInNetmask($ip, $netmask, $bits=null)
+    public static function isInNetmask($ip, $netmask, $bits = null)
     {
         // try to get the bit count
 
         if (null == $bits) {
             $elements = explode('/', $ip);
             if (2 == count($elements)) {
-                $ip   = $elements[0];
+                $ip = $elements[0];
                 $bits = $elements[1];
             } elseif (null == $bits) {
                 $elements = explode('/', $netmask);
                 if (2 == count($elements)) {
-                     $netmask = $elements[0];
-                     $bits    = $elements[1];
+                    $netmask = $elements[0];
+                    $bits = $elements[1];
                 }
 
                 if (null == $bits) {
@@ -315,7 +315,7 @@ class Net_IPv6
                 }
             }
         }
-        $binIp      = Net_IPv6::_ip2Bin(Net_IPv6::removeNetmaskSpec($ip));
+        $binIp = Net_IPv6::_ip2Bin(Net_IPv6::removeNetmaskSpec($ip));
         $binNetmask = Net_IPv6::_ip2Bin(Net_IPv6::removeNetmaskSpec($netmask));
 
         if (null != $bits
@@ -362,14 +362,14 @@ class Net_IPv6
      */
     public static function getAddressType($ip)
     {
-        $ip    = Net_IPv6::removeNetmaskSpec($ip);
+        $ip = Net_IPv6::removeNetmaskSpec($ip);
         $binip = Net_IPv6::_ip2Bin($ip);
 
         if (0 == strncmp(str_repeat('0', 128), $binip, 128)) { // ::/128
             return NET_IPV6_UNSPECIFIED;
-        } elseif (0 == strncmp(str_repeat('0', 127).'1', $binip, 128)) { // ::/128
+        } elseif (0 == strncmp(str_repeat('0', 127) . '1', $binip, 128)) { // ::/128
             return NET_IPV6_LOOPBACK;
-        } elseif (0 == strncmp(str_repeat('0', 80).str_repeat('1', 16), $binip, 96)) { // ::ffff/96
+        } elseif (0 == strncmp(str_repeat('0', 80) . str_repeat('1', 16), $binip, 96)) { // ::ffff/96
             return NET_IPV6_IPV4MAPPING;
         } elseif (0 == strncmp('1111111010', $binip, 10)) {
             return NET_IPV6_LOCAL_LINK;
@@ -382,22 +382,22 @@ class Net_IPv6
         } elseif (0 == strncmp('00000000', $binip, 8)) {
             return NET_IPV6_RESERVED;
         } elseif (0 == strncmp('00000001', $binip, 8)
-          || 0 == strncmp('1111110', $binip, 7)) {
+            || 0 == strncmp('1111110', $binip, 7)) {
             return NET_IPV6_UNASSIGNED;
         } elseif (0 == strncmp('0000001', $binip, 7)) {
             return NET_IPV6_RESERVED_NSAP;
         } elseif (0 == strncmp('0000010', $binip, 7)) {
             return NET_IPV6_RESERVED_IPX;
         } elseif (0 == strncmp('0000011', $binip, 7) ||
-                  0 == strncmp('111110', $binip, 6) ||
-                  0 == strncmp('11110', $binip, 5) ||
-                  0 == strncmp('00001', $binip, 5) ||
-                  0 == strncmp('1110', $binip, 4) ||
-                  0 == strncmp('0001', $binip, 4) ||
-                  0 == strncmp('001', $binip, 3) ||
-                  0 == strncmp('011', $binip, 3) ||
-                  0 == strncmp('101', $binip, 3) ||
-                  0 == strncmp('110', $binip, 3)) {
+            0 == strncmp('111110', $binip, 6) ||
+            0 == strncmp('11110', $binip, 5) ||
+            0 == strncmp('00001', $binip, 5) ||
+            0 == strncmp('1110', $binip, 4) ||
+            0 == strncmp('0001', $binip, 4) ||
+            0 == strncmp('001', $binip, 3) ||
+            0 == strncmp('011', $binip, 3) ||
+            0 == strncmp('101', $binip, 3) ||
+            0 == strncmp('110', $binip, 3)) {
             return NET_IPV6_UNASSIGNED;
         } elseif (0 == strncmp('010', $binip, 3)) {
             return NET_IPV6_UNICAST_PROVIDER;
@@ -445,17 +445,17 @@ class Net_IPv6
         if (false === $prefix) {
             $prefix = '';
         } else {
-            $ip     = Net_IPv6::removePrefixLength($ip);
-            $prefix = '/'.$prefix;
+            $ip = Net_IPv6::removePrefixLength($ip);
+            $prefix = '/' . $prefix;
         }
 
         $netmask = Net_IPv6::getNetmaskSpec($ip);
-        $uip     = Net_IPv6::removeNetmaskSpec($ip);
+        $uip = Net_IPv6::removeNetmaskSpec($ip);
 
         $c1 = -1;
         $c2 = -1;
 
-        if (false !== strpos($uip, '::') ) {
+        if (false !== strpos($uip, '::')) {
             list($ip1, $ip2) = explode('::', $uip);
             if ("" == $ip1) {
                 $c1 = -1;
@@ -482,32 +482,32 @@ class Net_IPv6
             if (-1 == $c1 && -1 == $c2) { // ::
                 $uip = "0:0:0:0:0:0:0:0";
             } elseif (-1 == $c1) {              // ::xxx
-                $fill = str_repeat('0:', 7-$c2);
-                $uip  = str_replace('::', $fill, $uip);
+                $fill = str_repeat('0:', 7 - $c2);
+                $uip = str_replace('::', $fill, $uip);
             } elseif (-1 == $c2) {              // xxx::
-                $fill = str_repeat(':0', 7-$c1);
-                $uip  = str_replace('::', $fill, $uip);
+                $fill = str_repeat(':0', 7 - $c1);
+                $uip = str_replace('::', $fill, $uip);
             } else {                          // xxx::xxx
-                $fill = str_repeat(':0:', max(1, 6-$c2-$c1));
-                $uip  = str_replace('::', $fill, $uip);
-                $uip  = str_replace('::', ':', $uip);
+                $fill = str_repeat(':0:', max(1, 6 - $c2 - $c1));
+                $uip = str_replace('::', $fill, $uip);
+                $uip = str_replace('::', ':', $uip);
             }
         }
 
         if (true == $leadingZeros) {
-            $uipT    = array();
+            $uipT = array();
             $uiparts = explode(':', $uip);
-            foreach($uiparts as $p) {
+            foreach ($uiparts as $p) {
                 $uipT[] = sprintf('%04s', $p);
             }
             $uip = implode(':', $uipT);
         }
 
         if ('' != $netmask) {
-                $uip = $uip.'/'.$netmask;
+            $uip = $uip . '/' . $netmask;
         }
 
-        return $uip.$prefix;
+        return $uip . $prefix;
     }
 
     // }}}
@@ -532,7 +532,7 @@ class Net_IPv6
      *
      * Example: FF01::0:1 -> FF01::1
      *
-     * @param String  $ip    a valid IPv6-address (hex format)
+     * @param String $ip a valid IPv6-address (hex format)
      * @param boolean $force if true the address will be compressed as best as possible (since 1.2.0)
      *
      * @return String the compressed IPv6-address (hex format)
@@ -557,12 +557,12 @@ class Net_IPv6
         if (false === $prefix) {
             $prefix = '';
         } else {
-            $ip     = Net_IPv6::removePrefixLength($ip);
-            $prefix = '/'.$prefix;
+            $ip = Net_IPv6::removePrefixLength($ip);
+            $prefix = '/' . $prefix;
         }
 
         $netmask = Net_IPv6::getNetmaskSpec($ip);
-        $ip      = Net_IPv6::removeNetmaskSpec($ip);
+        $ip = Net_IPv6::removeNetmaskSpec($ip);
 
         $ipp = explode(':', $ip);
 
@@ -588,10 +588,10 @@ class Net_IPv6
         $cip = preg_replace('/((^:)|(:$))/', '::', $cip);
 
         if ('' != $netmask) {
-            $cip = $cip.'/'.$netmask;
+            $cip = $cip . '/' . $netmask;
         }
 
-        return $cip.$prefix;
+        return $cip . $prefix;
 
     }
 
@@ -600,7 +600,7 @@ class Net_IPv6
     /**
      * Represent IPv6 address in RFC5952 format.
      *
-     * @param String  $ip a valid IPv6-address (hex format)
+     * @param String $ip a valid IPv6-address (hex format)
      *
      * @return String the recommended representation of IPv6-address (hex format)
      * @access public
@@ -654,7 +654,7 @@ class Net_IPv6
      * Example:  0:0:0:0:0:0:13.1.68.3
      *           0:0:0:0:0:FFFF:129.144.52.38
      *
-     * @param String  $ip         a valid IPv6-address (hex format)
+     * @param String $ip a valid IPv6-address (hex format)
      * @param Boolean $uncompress if true, the address will be uncompressed
      *                            before processing
      *
@@ -672,9 +672,9 @@ class Net_IPv6
         }
 
         if (strstr($ip, '.')) {
-            $pos      = strrpos($ip, ':');
+            $pos = strrpos($ip, ':');
             $ip{$pos} = '_';
-            $ipPart   = explode('_', $ip);
+            $ipPart = explode('_', $ip);
             return $ipPart;
         } else {
             return array($ip, "");
@@ -699,16 +699,16 @@ class Net_IPv6
     {
         $elements = Net_IPv6::separate($ip);
         $ip = $elements[0];
-        if ('' != $elements[1] && ( !is_numeric($elements[1]) || 0 > $elements[1] || 128 < $elements[1])) {
+        if ('' != $elements[1] && (!is_numeric($elements[1]) || 0 > $elements[1] || 128 < $elements[1])) {
             return false;
         }
 
         $ipPart = Net_IPv6::SplitV64($ip);
-        $count  = 0;
+        $count = 0;
 
         if (!empty($ipPart[0])) {
             $ipv6 = explode(':', $ipPart[0]);
-            foreach($ipv6 as $element) { // made a validate precheck
+            foreach ($ipv6 as $element) { // made a validate precheck
                 if (!preg_match('/[0-9a-fA-F]*/', $element)) {
                     return false;
                 }
@@ -731,7 +731,7 @@ class Net_IPv6
             if (8 == $count) {
                 return true;
             } elseif (6 == $count and !empty($ipPart[1])) {
-                $ipv4  = explode('.', $ipPart[1]);
+                $ipv4 = explode('.', $ipPart[1]);
                 $count = 0;
                 for ($i = 0; $i < count($ipv4); $i++) {
                     if ($ipv4[$i] >= 0 && (integer)$ipv4[$i] <= 255
@@ -766,7 +766,7 @@ class Net_IPv6
      * 'end' the highest address.
      *
      * @param String $ipToParse the IPv6 address
-     * @param String $bits      the optional count of netmask bits
+     * @param String $bits the optional count of netmask bits
      *
      * @return array ['start', 'end'] the lowest and highest IPv6 address
      * @access public
@@ -776,29 +776,29 @@ class Net_IPv6
 
     public static function parseAddress($ipToParse, $bits = null)
     {
-        $ip      = null;
+        $ip = null;
         $bitmask = null;
-        if ( null == $bits ) {
+        if (null == $bits) {
             $elements = explode('/', $ipToParse);
-            if ( 2 == count($elements) ) {
-                $ip      = Net_IPv6::uncompress($elements[0]);
+            if (2 == count($elements)) {
+                $ip = Net_IPv6::uncompress($elements[0]);
                 $bitmask = $elements[1];
             } else {
                 return null;
             }
         } else {
-            $ip      = Net_IPv6::uncompress($ipToParse);
+            $ip = Net_IPv6::uncompress($ipToParse);
             $bitmask = $bits;
         }
 
-        $binNetmask = str_repeat('1', $bitmask).
-                      str_repeat('0', 128 - $bitmask);
+        $binNetmask = str_repeat('1', $bitmask) .
+            str_repeat('0', 128 - $bitmask);
         $maxNetmask = str_repeat('1', 128);
 
         $startAddress = Net_IPv6::_bin2Ip(Net_IPv6::_ip2Bin($ip)
-                                          & $binNetmask);
-        $endAddress   = Net_IPv6::_bin2Ip(Net_IPv6::_ip2Bin($ip)
-                                          | ($binNetmask ^ $maxNetmask));
+            & $binNetmask);
+        $endAddress = Net_IPv6::_bin2Ip(Net_IPv6::_ip2Bin($ip)
+            | ($binNetmask ^ $maxNetmask));
 
         return array('start' => $startAddress, 'end' => $endAddress);
     }
@@ -826,8 +826,8 @@ class Net_IPv6
 
         $parts = explode(':', $ip);
 
-        foreach ( $parts as $v ) {
-            $str     = base_convert($v, 16, 2);
+        foreach ($parts as $v) {
+            $str = base_convert($v, 16, 2);
             $binstr .= str_pad($str, 16, '0', STR_PAD_LEFT);
         }
 
@@ -855,9 +855,9 @@ class Net_IPv6
 
         $parts = str_split($bin, "16");
 
-        foreach ( $parts as $v ) {
+        foreach ($parts as $v) {
             $str = base_convert($v, 2, 16);
-            $ip .= $str.":";
+            $ip .= $str . ":";
         }
         $ip = substr($ip, 0, -1);
         return $ip;
