@@ -1,3 +1,4 @@
+<?php include 'guiconfig.inc'; ?>
 <?php print_service_banner('firewall'); ?>
 <section class="col-xs-12">
     <ul class="nav nav-tabs" data-tabs="tabs" id="maintabs">
