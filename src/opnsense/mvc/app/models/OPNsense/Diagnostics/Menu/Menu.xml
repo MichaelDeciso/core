@@ -18,4 +18,7 @@
             <NDPTable VisibleName="NDP Table" url="/ui/diagnostics/interface/ndp"/>
         </Diagnostics>
     </Interfaces>
+    <Firewall>
+        <pfInfo order="30" url="/ui/diagnostics/pfinfo" VisibleName="pfInfo"/>
+    </Firewall>
 </menu>

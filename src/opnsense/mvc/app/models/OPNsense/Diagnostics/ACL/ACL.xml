@@ -50,4 +50,11 @@
             <pattern>api/diagnostics/netflow/*</pattern>
         </patterns>
     </page-diagnostics-netflow>
+    <page-diagnostics-pf-info>
+        <name>Diagnostics: pfInfo</name>
+        <patterns>
+            <pattern>ui/diagnostics/pfinfo*</pattern>
+            <pattern>api/diagnostics/pfinfo*</pattern>
+        </patterns>
+    </page-diagnostics-pf-info>
 </acl>
