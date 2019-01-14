@@ -54,6 +54,7 @@ $di->set('view', function () use ($config) {
             $volt->getCompiler()->addFunction('theme_file_or_default', 'view_fetch_themed_filename');
             $volt->getCompiler()->addFunction('file_exists', 'view_file_exists');
             $volt->getCompiler()->addFunction('cache_safe', 'view_cache_safe');
+            $volt->getCompiler()->addFunction('ucfirst', 'ucfirst');
 
             return $volt;
         },
