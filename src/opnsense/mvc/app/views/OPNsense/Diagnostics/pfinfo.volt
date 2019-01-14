@@ -4,7 +4,7 @@
         {% for i, tabname in dataTabs %}
         <li {% if i == 0 %}class="active"{% endif %}>
         <a data-toggle="tab" href="#{{ tabname }}" id="{{ tabname }}_tab">
-            {{ tabname|ucfirst }}
+            {{ tabname }}
         </a>
         </li>
         {% endfor %}
