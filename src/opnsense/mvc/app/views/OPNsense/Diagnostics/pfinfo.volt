@@ -30,7 +30,7 @@
 
     $(document).ready(function () {
         setInterval(function() {
-            ajaxCall('/diag_pf_info.php', {}, function(data, status) {
+            ajaxCall('/api/diagnostics/pfinfo/get_activity', {}, function(data, status) {
                 // push data into tabs
                 $.each(data, function (key, value) {
                     if ($('#data_' + key.toLowerCase()).length > 0) {
