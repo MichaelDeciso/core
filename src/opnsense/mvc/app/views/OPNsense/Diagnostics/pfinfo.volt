@@ -24,3 +24,20 @@
         {% endfor %}
     </div>
 </section>
+
+<script>
+    'use strict';
+
+    $(document).ready(function () {
+        setInterval(function() {
+            ajaxCall('/diag_pf_info.php', {}, function(data, status) {
+                // push data into tabs
+                $.each(data, function (key, value) {
+                    if ($('#data_' + key.toLowerCase()).length > 0) {
+                        $('#data_' + key.toLowerCase()).text(value);
+                    }
+                });
+            });
+        }, 2000);
+    });
+</script>
