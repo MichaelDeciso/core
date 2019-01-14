@@ -32,12 +32,16 @@ use OPNsense\Base\IndexController;
 
 /**
  * @package OPNsense\Diagnostics
+ * @property \Phalcon\Mvc\View $view;
  */
 class PfinfoController extends IndexController
 {
+
     public function indexAction()
     {
         $this->view->pick('OPNsense/Diagnostics/pfinfo');
         $this->view->setVar('dataTabs', ['info', 'memory', 'timeouts', 'interfaces', 'rules']);
+        //$this->filter->addFunction('ucfirst', 'ucfirst');
+
     }
 }
